@@ -3,14 +3,14 @@ import 'package:ecommerce_app/utils/product.dart';
 
 class ProductView extends StatelessWidget {
   final Product product;
-  
+
   ProductView({super.key, required this.product});
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: PreferredSize(
-        preferredSize: Size.fromHeight(250), // Sets exact height
+        preferredSize: Size.fromHeight(400), // Sets exact height
         child: AppBar(
           backgroundColor: Colors.transparent,
           elevation: 0, // Removes shadow
@@ -24,26 +24,32 @@ class ProductView extends StatelessWidget {
                 ? Image.memory(
                     product.webImage!,
                     fit: BoxFit.cover,
-                    height: 250, // Fixed height
+                    height: 400, // Fixed height
                     width: double.infinity, // Full width
                   )
                 : product.imageFile != null
-                    ? Image.file(
-                        product.imageFile!,
-                        fit: BoxFit.cover,
-                        height: 200, // Fixed height
-                        width: double.infinity, // Full width
-                      )
-                    : Container(
-                        height: 200,
-                        width: double.infinity, // Full width
-                        color: Colors.grey[300],
-                        child: Icon(
-                          Icons.image_not_supported,
-                          size: 100,
-                          color: Colors.grey[600],
-                        ),
+                ? Image.file(
+                    product.imageFile!,
+                    fit: BoxFit.cover,
+                    height: 200, // Fixed height
+                    width: double.infinity, // Full width
+                  )
+                : Container(
+                    height: 200,
+                    width: double.infinity, // Full width
+                    color: Colors.grey[300],
+                    child: Icon(
+                      Icons.image_not_supported,
+                      size: 100,
+                      color: Colors.grey[600],
+                    ),
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.only(
+                        bottomLeft: Radius.circular(20),
+                        bottomRight: Radius.circular(20),
                       ),
+                    ),
+                  ),
           ),
         ),
       ),
@@ -68,7 +74,10 @@ class ProductView extends StatelessWidget {
                         SizedBox(height: 4),
                         Text(
                           product.name,
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                       ],
                     ),
@@ -80,7 +89,10 @@ class ProductView extends StatelessWidget {
                       children: [
                         Text(
                           "\$${product.price.toStringAsFixed(2)}",
-                          style: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+                          style: TextStyle(
+                            fontSize: 20,
+                            fontWeight: FontWeight.bold,
+                          ),
                         ),
                         SizedBox(height: 4),
                         Row(
@@ -95,7 +107,11 @@ class ProductView extends StatelessWidget {
                               ),
                             ),
                             SizedBox(width: 4),
-                            Icon(Icons.star, color: const Color.fromARGB(255, 194, 228, 21), size: 16),
+                            Icon(
+                              Icons.star,
+                              color: const Color.fromARGB(255, 194, 228, 21),
+                              size: 16,
+                            ),
                           ],
                         ),
                       ],
@@ -119,68 +135,117 @@ class ProductView extends StatelessWidget {
                     child: Row(
                       children: [
                         // Add size options here
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4),
+                        SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text("37"),
                           ),
-                          child: Text("37"),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4),
+                        SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text("38"),
                           ),
-                          child: Text("38"),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4),
+                        SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text("39"),
                           ),
-                          child: Text("39"),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4),
+                        SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text("40"),
                           ),
-                          child: Text("40"),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4),
+                        SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text("41"),
                           ),
-                          child: Text("41"),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4),
+                        SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text("42"),
                           ),
-                          child: Text("42"),
                         ),
-                        Container(
-                          padding: EdgeInsets.symmetric(horizontal: 12, vertical: 6),
-                          margin: EdgeInsets.only(right: 8),
-                          decoration: BoxDecoration(
-                            border: Border.all(color: Colors.grey),
-                            borderRadius: BorderRadius.circular(4),
+                        SizedBox(
+                          width: 100,
+                          height: 50,
+                          child: Container(
+                            padding: EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 6,
+                            ),
+                            margin: EdgeInsets.only(right: 8),
+                            decoration: BoxDecoration(
+                              border: Border.all(color: Colors.grey),
+                              borderRadius: BorderRadius.circular(10),
+                            ),
+                            child: Text("43"),
                           ),
-                          child: Text("43"),
                         ),
                       ],
                     ),
@@ -188,7 +253,11 @@ class ProductView extends StatelessWidget {
                   SizedBox(height: 20),
                   Text(
                     product.description,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w100, color: Colors.black),
+                    style: TextStyle(
+                      fontSize: 20,
+                      fontWeight: FontWeight.w100,
+                      color: Colors.black,
+                    ),
                   ),
                   SizedBox(height: 30),
                   Row(
@@ -199,7 +268,9 @@ class ProductView extends StatelessWidget {
                             // Update functionality
                             ScaffoldMessenger.of(context).showSnackBar(
                               SnackBar(
-                                content: Text('Update functionality coming soon!'),
+                                content: Text(
+                                  'Update functionality coming soon!',
+                                ),
                                 backgroundColor: Colors.blue,
                               ),
                             );
@@ -239,10 +310,13 @@ class ProductView extends StatelessWidget {
                               builder: (BuildContext context) {
                                 return AlertDialog(
                                   title: Text('Delete Product'),
-                                  content: Text('Are you sure you want to delete this product?'),
+                                  content: Text(
+                                    'Are you sure you want to delete this product?',
+                                  ),
                                   actions: [
                                     TextButton(
-                                      onPressed: () => Navigator.of(context).pop(),
+                                      onPressed: () =>
+                                          Navigator.of(context).pop(),
                                       child: Text('Cancel'),
                                     ),
                                     TextButton(
@@ -251,14 +325,21 @@ class ProductView extends StatelessWidget {
                                         Product.products.remove(product);
                                         Navigator.of(context).pop();
                                         Navigator.of(context).pop('deleted');
-                                        ScaffoldMessenger.of(context).showSnackBar(
+                                        ScaffoldMessenger.of(
+                                          context,
+                                        ).showSnackBar(
                                           SnackBar(
-                                            content: Text('Product deleted successfully!'),
+                                            content: Text(
+                                              'Product deleted successfully!',
+                                            ),
                                             backgroundColor: Colors.red,
                                           ),
                                         );
                                       },
-                                      child: Text('Delete', style: TextStyle(color: Colors.red)),
+                                      child: Text(
+                                        'Delete',
+                                        style: TextStyle(color: Colors.red),
+                                      ),
                                     ),
                                   ],
                                 );
@@ -292,6 +373,7 @@ class ProductView extends StatelessWidget {
                       ),
                     ],
                   ),
+                  SizedBox(height: 20),
                 ],
               ),
             ),
