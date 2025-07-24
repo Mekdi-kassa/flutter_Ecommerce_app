@@ -79,10 +79,7 @@ class _HomePageState extends State<HomePage> {
                 ),
                 ElevatedButton(
                   onPressed: () {
-                    Navigator.push(
-                      context,
-                      MaterialPageRoute(builder: (context) => Search()),
-                    );
+                    Navigator.pushNamed(context, '/search');
                   },
                   child: Icon(Icons.search, color: Colors.black38),
                 ),
@@ -139,10 +136,7 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
-          final result = await Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => AddProduct()),
-          );
+          final result = await Navigator.pushNamed(context, '/add');
           // Refresh the page when returning from AddProduct
           if (result != null) {
             setState(() {
