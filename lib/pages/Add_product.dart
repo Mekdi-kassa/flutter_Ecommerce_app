@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:ecommerce_app/utils/product.dart';
 import 'package:file_picker/file_picker.dart';
@@ -22,7 +21,6 @@ class _AddProductState extends State<AddProduct> {
 
   File? _imageFile;
   Uint8List? _webImage;
-  bool _isLoading = false;
 
   Future<void> _pickImage() async {
     try {
@@ -58,8 +56,6 @@ class _AddProductState extends State<AddProduct> {
       return;
     }
 
-    setState(() => _isLoading = true);
-
     try {
       // Create the product object
       final newProduct = Product(
@@ -85,10 +81,6 @@ class _AddProductState extends State<AddProduct> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error adding product: ${e.toString()}')),
       );
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
     }
   }
 

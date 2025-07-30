@@ -1,5 +1,3 @@
-import 'package:ecommerce_app/pages/Add_product.dart';
-import 'package:ecommerce_app/pages/search.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/utils/product.dart';
