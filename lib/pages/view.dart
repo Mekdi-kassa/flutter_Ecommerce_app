@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:ecommerce_app/utils/product.dart';
+import 'package:ecommerce_app/features/product/domain/entities/product.dart' as clean_product;
+import 'package:ecommerce_app/features/product/data/services/product_service.dart';
+import 'package:ecommerce_app/pages/edit_product.dart';
 
 class ProductView extends StatelessWidget {
   final Product product;
+  final ProductService _productService = ProductService();
 
   ProductView({super.key, required this.product});
 
@@ -264,16 +268,33 @@ class ProductView extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            // Update functionality
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Update functionality coming soon!',
-                                ),
-                                backgroundColor: Colors.blue,
+                          onPressed: () async {
+                            // Convert old product to new entity
+                            final cleanProduct = clean_product.Product(
+                              id: product.hashCode.toString(),
+                              name: product.name,
+                              description: product.description,
+                              price: product.price,
+                              imageUrl: '', // Placeholder for now
+                            );
+
+                            // Navigate to edit page
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => EditProduct(product: cleanProduct),
                               ),
                             );
+
+                            // Show success message if product was updated
+                            if (result != null) {
+                              ScaffoldMessenger.of(context).showSnackBar(
+                                SnackBar(
+                                  content: Text('Product updated successfully!'),
+                                  backgroundColor: Colors.green,
+                                ),
+                              );
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -303,8 +324,8 @@ class ProductView extends StatelessWidget {
                       SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
-                            // Delete functionality
+                          onPressed: () async {
+                            // Delete functionality using Clean Architecture
                             showDialog(
                               context: context,
                               builder: (BuildContext context) {
@@ -320,21 +341,41 @@ class ProductView extends StatelessWidget {
                                       child: Text('Cancel'),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        // Remove product from list
-                                        Product.products.remove(product);
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop('deleted');
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Product deleted successfully!',
+                                      onPressed: () async {
+                                        try {
+                                          // Convert old product to new entity
+                                          final cleanProduct = clean_product.Product(
+                                            id: product.hashCode.toString(),
+                                            name: product.name,
+                                            description: product.description,
+                                            price: product.price,
+                                            imageUrl: '', // Placeholder for now
+                                          );
+
+                                          // Delete product using Clean Architecture
+                                          await _productService.deleteProduct(cleanProduct.id);
+                                          
+                                          // Also remove from old list for backward compatibility
+                                          Product.products.remove(product);
+                                          
+                                          Navigator.of(context).pop();
+                                          Navigator.of(context).pop('deleted');
+                                          
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Product deleted successfully!'),
+                                              backgroundColor: Colors.red,
                                             ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
+                                          );
+                                        } catch (e) {
+                                          Navigator.of(context).pop();
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Error deleting product: ${e.toString()}'),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
                                       },
                                       child: Text(
                                         'Delete',
