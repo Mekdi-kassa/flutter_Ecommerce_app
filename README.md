@@ -6,6 +6,21 @@ A Flutter-based eCommerce mobile application built using Clean Architecture prin
 
 This project follows **Clean Architecture** principles, which provides a way to organize code for better separation of concerns and maintainability. The architecture is divided into layers:
 
+### Contracts and Data Sources
+
+The app implements proper contracts and repository dependencies:
+
+- **ProductRemoteDataSource**: Contract for remote API operations
+- **ProductLocalDataSource**: Contract for local storage operations  
+- **NetworkInfo**: Contract for network connectivity checks
+- **ProductRepository**: Contract defining all repository methods
+
+### Data Source Implementations
+
+- **ProductRemoteDataSourceImpl**: Simulates remote API calls
+- **ProductLocalDataSourceImpl**: Simulates local storage operations
+- **NetworkInfoImpl**: Simulates network connectivity checks
+
 ### Project Structure
 
 ```
@@ -13,8 +28,11 @@ lib/
 ├── core/                           # Shared core components
 │   ├── error/                     # Error handling logic
 │   │   └── failures.dart
-│   └── entities/                  # Base entities
-│       └── base_entity.dart
+│   ├── entities/                  # Base entities
+│   │   └── base_entity.dart
+│   └── network/                   # Network contracts
+│       ├── network_info.dart
+│       └── network_info_impl.dart
 ├── features/                      # Feature-specific modules
 │   └── product/                   # Product feature module
 │       ├── domain/                # Business logic layer
@@ -26,10 +44,17 @@ lib/
 │       │       ├── insert_product.dart
 │       │       ├── update_product.dart
 │       │       ├── delete_product.dart
-│       │       └── get_product.dart
+│       │       ├── get_product.dart
+│       │       ├── get_products.dart
+│       │       └── search_products.dart
 │       └── data/                  # Data layer
 │           ├── models/            # Data models
 │           │   └── product_model.dart
+│           ├── datasources/       # Data source contracts & implementations
+│           │   ├── product_remote_data_source.dart
+│           │   ├── product_remote_data_source_impl.dart
+│           │   ├── product_local_data_source.dart
+│           │   └── product_local_data_source_impl.dart
 │           ├── repositories/      # Repository implementations
 │           │   └── product_repository_impl.dart
 │           └── services/          # Data services

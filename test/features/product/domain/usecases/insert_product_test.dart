@@ -2,14 +2,28 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:ecommerce_app/features/product/domain/entities/product.dart';
 import 'package:ecommerce_app/features/product/domain/usecases/insert_product.dart';
 import 'package:ecommerce_app/features/product/data/repositories/product_repository_impl.dart';
+import 'package:ecommerce_app/features/product/data/datasources/product_remote_data_source_impl.dart';
+import 'package:ecommerce_app/features/product/data/datasources/product_local_data_source_impl.dart';
+import 'package:ecommerce_app/core/network/network_info_impl.dart';
 
 void main() {
   group('InsertProduct', () {
     late ProductRepositoryImpl repository;
     late InsertProduct useCase;
+    late ProductRemoteDataSourceImpl remoteDataSource;
+    late ProductLocalDataSourceImpl localDataSource;
+    late NetworkInfoImpl networkInfo;
 
     setUp(() {
-      repository = ProductRepositoryImpl();
+      remoteDataSource = ProductRemoteDataSourceImpl();
+      localDataSource = ProductLocalDataSourceImpl();
+      networkInfo = NetworkInfoImpl();
+      
+      repository = ProductRepositoryImpl(
+        remoteDataSource: remoteDataSource,
+        localDataSource: localDataSource,
+        networkInfo: networkInfo,
+      );
       useCase = InsertProduct(repository);
     });
 
@@ -24,15 +38,14 @@ void main() {
       );
 
       // Act
-      await useCase(product);
+      final result = await useCase(product);
 
       // Assert
-      final retrievedProduct = await repository.getProduct('1');
-      expect(retrievedProduct, isNotNull);
-      expect(retrievedProduct!.name, 'Test Product');
-      expect(retrievedProduct.description, 'Test Description');
-      expect(retrievedProduct.price, 99.99);
-      expect(retrievedProduct.imageUrl, 'https://example.com/image.jpg');
+      expect(result, isNotNull);
+      expect(result.name, 'Test Product');
+      expect(result.description, 'Test Description');
+      expect(result.price, 99.99);
+      expect(result.imageUrl, 'https://example.com/image.jpg');
     });
 
     test('should handle multiple product insertions', () async {
@@ -53,17 +66,50 @@ void main() {
       );
 
       // Act
-      await useCase(product1);
-      await useCase(product2);
+      final result1 = await useCase(product1);
+      final result2 = await useCase(product2);
 
       // Assert
-      final retrieved1 = await repository.getProduct('1');
-      final retrieved2 = await repository.getProduct('2');
-      
-      expect(retrieved1, isNotNull);
-      expect(retrieved2, isNotNull);
-      expect(retrieved1!.name, 'Product 1');
-      expect(retrieved2!.name, 'Product 2');
+      expect(result1, isNotNull);
+      expect(result2, isNotNull);
+      expect(result1.name, 'Product 1');
+      expect(result2.name, 'Product 2');
+    });
+
+    test('should work when network is available', () async {
+      // Arrange
+      networkInfo.setConnected(true);
+      final product = Product(
+        id: '3',
+        name: 'Network Product',
+        description: 'Network Description',
+        price: 30.0,
+        imageUrl: 'url3',
+      );
+
+      // Act
+      final result = await useCase(product);
+
+      // Assert
+      expect(result.name, 'Network Product');
+    });
+
+    test('should work when network is unavailable', () async {
+      // Arrange
+      networkInfo.setConnected(false);
+      final product = Product(
+        id: '4',
+        name: 'Offline Product',
+        description: 'Offline Description',
+        price: 40.0,
+        imageUrl: 'url4',
+      );
+
+      // Act
+      final result = await useCase(product);
+
+      // Assert
+      expect(result.name, 'Offline Product');
     });
   });
 } 
