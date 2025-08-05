@@ -9,4 +9,5 @@ class ProductLocalDataSource {
   Future<void> addProduct(dynamic product) async {
     _localProducts.add(product);
   }
+  
 }
