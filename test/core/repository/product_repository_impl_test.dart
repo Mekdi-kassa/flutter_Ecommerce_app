@@ -11,15 +11,15 @@ void main() {
     late ProductRepositoryImpl repository;
 
     setUp(() {
-      localDataSource = ProductLocalDataSource();
-      remoteDataSource = ProductRemoteDataSource();
-      networkAvailable = false;
-      repository = ProductRepositoryImpl(
-        localDataSource: localDataSource,
-        remoteDataSource: remoteDataSource,
-        isNetworkAvailable: () async => networkAvailable,
-      );
-    });
+    localDataSource = ProductLocalDataSourceImpl();
+    remoteDataSource = ProductRemoteDataSource();
+    networkAvailable = false;
+    repository = ProductRepositoryImpl(
+      localDataSource: localDataSource,
+      remoteDataSource: remoteDataSource,
+      isNetworkAvailable: () async => networkAvailable,
+    );
+  });
 
     test('uses local data source when network is unavailable', () async {
       await repository.addProduct('localProduct');
