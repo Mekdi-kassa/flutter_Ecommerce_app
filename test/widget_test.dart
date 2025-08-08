@@ -10,20 +10,22 @@ import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 void main() {
-  testWidgets('Counter increments smoke test', (WidgetTester tester) async {
+  testWidgets('Ecommerce app smoke test', (WidgetTester tester) async {
     // Build our app and trigger a frame.
     await tester.pumpWidget(MyApp());
 
-    // Verify that our counter starts at 0.
-    expect(find.text('0'), findsOneWidget);
-    expect(find.text('1'), findsNothing);
-
-    // Tap the '+' icon and trigger a frame.
-    await tester.tap(find.byIcon(Icons.add));
-    await tester.pump();
-
-    // Verify that our counter has incremented.
-    expect(find.text('0'), findsNothing);
-    expect(find.text('1'), findsOneWidget);
+    // Verify that the app loads without crashing
+    expect(find.byType(MaterialApp), findsOneWidget);
+    
+    // Verify that the home page loads with expected elements
+    expect(find.text('July 18,2025'), findsOneWidget);
+    expect(find.text('Hello,Mekdelawit Abdina'), findsOneWidget);
+    expect(find.text('Avaliable Products'), findsOneWidget);
+    
+    // Verify that the floating action button exists
+    expect(find.byType(FloatingActionButton), findsOneWidget);
+    
+    // Verify that the search button exists
+    expect(find.byIcon(Icons.search), findsOneWidget);
   });
 }

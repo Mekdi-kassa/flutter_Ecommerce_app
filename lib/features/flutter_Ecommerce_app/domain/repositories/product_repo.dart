@@ -1,4 +1,4 @@
-import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/entites/product.dart';
+import 'package:ecommerce_app/features/flutter_Ecommerce_app/domain/entites/product.dart';
 import 'package:flutter/material.dart';
 
 abstract class ProductRepo {

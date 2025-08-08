@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/entites/product.dart';
-import 'package:ecommerce_app/feature/flutter_Ecommerce_app/data/repositories/product_repository_impl.dart';
-import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/usecases/delete.dart';
-import 'package:ecommerce_app/feature/flutter_Ecommerce_app/presentation/pages/update_product.dart';
+import 'package:ecommerce_app/features/flutter_Ecommerce_app/domain/entites/product.dart';
+import 'package:ecommerce_app/features/flutter_Ecommerce_app/data/repositories/product_repository_impl.dart';
+import 'package:ecommerce_app/features/flutter_Ecommerce_app/domain/usecases/delete.dart';
+import 'package:ecommerce_app/features/flutter_Ecommerce_app/presentation/pages/update_product.dart';
 
 class ProductView extends StatelessWidget {
   final Product product;

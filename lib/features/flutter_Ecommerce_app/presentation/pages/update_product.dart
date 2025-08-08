@@ -1,33 +1,51 @@
-import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/repositories/product_repo.dart';
-import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/usecases/Add.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/entites/product.dart';
+import 'package:ecommerce_app/features/flutter_Ecommerce_app/domain/entites/product.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
-import 'package:ecommerce_app/feature/flutter_Ecommerce_app/data/repositories/product_repository_impl.dart';
 
-class AddProduct extends StatefulWidget {
-  AddProduct({super.key});
+class UpdateProduct extends StatefulWidget {
+  final Product product;
+  
+  UpdateProduct({super.key, required this.product});
 
   @override
-  State<AddProduct> createState() => _AddProductState();
+  State<UpdateProduct> createState() => _UpdateProductState();
 }
 
-class _AddProductState extends State<AddProduct> {
+class _UpdateProductState extends State<UpdateProduct> {
   final _formKey = GlobalKey<FormState>();
-  final ProductRepo _productRepo = ProductRepositoryImpl();
-  final InsertProduct _insertProduct;
 
-  _AddProductState() : _insertProduct = InsertProduct(ProductRepositoryImpl());
-
-  TextEditingController _name = TextEditingController();
-  TextEditingController _description = TextEditingController();
-  TextEditingController _price = TextEditingController();
-  TextEditingController _catagory = TextEditingController();
+  late TextEditingController _name;
+  late TextEditingController _description;
+  late TextEditingController _price;
+  late TextEditingController _category;
 
   File? _imageFile;
   Uint8List? _webImage;
+
+  @override
+  void initState() {
+    super.initState();
+    // Initialize controllers with existing product data
+    _name = TextEditingController(text: widget.product.name);
+    _description = TextEditingController(text: widget.product.description);
+    _price = TextEditingController(text: widget.product.price.toString());
+    _category = TextEditingController(text: widget.product.category);
+    
+    // Set existing image
+    _webImage = widget.product.webImage;
+    _imageFile = widget.product.imageFile;
+  }
+
+  @override
+  void dispose() {
+    _name.dispose();
+    _description.dispose();
+    _price.dispose();
+    _category.dispose();
+    super.dispose();
+  }
 
   Future<void> _pickImage() async {
     try {
@@ -42,14 +60,14 @@ class _AddProductState extends State<AddProduct> {
         });
       }
     } catch (e) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(SnackBar(content: Text('Error: ${e.toString()}')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(content: Text('Error: ${e.toString()}')),
+      );
     }
   }
 
-  Future<void> _submitProduct() async {
-    print('Submit button pressed');
+  Future<void> _updateProductData() async {
+    print('Update button pressed');
     // Validate form first
     if (!_formKey.currentState!.validate()) {
       return;
@@ -57,50 +75,46 @@ class _AddProductState extends State<AddProduct> {
 
     // Check if image is selected
     if (_imageFile == null && _webImage == null) {
-      ScaffoldMessenger.of(
-        context,
-      ).showSnackBar(const SnackBar(content: Text('Please select an image')));
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Please select an image')),
+      );
       return;
     }
 
     try {
-      // Create the product object
-      final newProduct = Product(
+      // Create the updated product object
+      final updatedProduct = Product(
         name: _name.text.trim(),
         description: _description.text.trim(),
-        category: _catagory.text.trim(),
+        category: _category.text.trim(),
         price: double.parse(_price.text.trim()),
         webImage: _webImage,
         imageFile: _imageFile,
       );
 
-      // Add to repository using the use case
-      await _insertProduct(newProduct);
-      print('Product added successfully: ${newProduct.name}');
-
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Product added successfully!')),
+        const SnackBar(content: Text('Product updated successfully!')),
       );
 
-      // Close the screen and return the new product
-      Navigator.pop(context, newProduct);
+      // Close the screen and return the updated product
+      Navigator.pop(context, updatedProduct);
     } catch (e) {
       ScaffoldMessenger.of(context).showSnackBar(
-        SnackBar(content: Text('Error adding product: ${e.toString()}')),
+        SnackBar(content: Text('Error updating product: ${e.toString()}')),
       );
     }
   }
 
   void _clearForm() {
     _formKey.currentState?.reset();
-    _name.clear();
-    _description.clear();
-    _price.clear();
-    _catagory.clear();
+    _name.text = widget.product.name;
+    _description.text = widget.product.description;
+    _price.text = widget.product.price.toString();
+    _category.text = widget.product.category;
     setState(() {
-      _imageFile = null;
-      _webImage = null;
+      _imageFile = widget.product.imageFile;
+      _webImage = widget.product.webImage;
     });
   }
 
@@ -109,7 +123,7 @@ class _AddProductState extends State<AddProduct> {
     return Scaffold(
       appBar: AppBar(
         title: Text(
-          "A D D - P R O D U C T S",
+          "U P D A T E - P R O D U C T",
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontFamily: 'Poppins',
@@ -176,7 +190,7 @@ class _AddProductState extends State<AddProduct> {
                   width: 300,
                   height: 50,
                   child: TextFormField(
-                    controller: _catagory,
+                    controller: _category,
                     validator: (value) => value == null || value.isEmpty
                         ? 'Enter category'
                         : null,
@@ -233,9 +247,9 @@ class _AddProductState extends State<AddProduct> {
                   width: 200,
                   height: 40,
                   child: ElevatedButton(
-                    onPressed: _submitProduct,
+                    onPressed: _updateProductData,
                     child: Text(
-                      "A d d",
+                      "U p d a t e",
                       style: TextStyle(
                         fontWeight: FontWeight.w300,
                         fontSize: 16,
@@ -255,7 +269,7 @@ class _AddProductState extends State<AddProduct> {
                   child: ElevatedButton(
                     onPressed: _clearForm,
                     child: Text(
-                      "C L E A R",
+                      "R E S E T",
                       style: TextStyle(
                         fontWeight: FontWeight.w300,
                         fontSize: 16,
@@ -282,8 +296,8 @@ class _AddProductState extends State<AddProduct> {
       children: [
         Icon(Icons.add_a_photo, size: 40, color: Colors.grey),
         SizedBox(height: 8),
-        Text('Add Product Image', style: TextStyle(color: Colors.grey)),
+        Text('Update Product Image', style: TextStyle(color: Colors.grey)),
       ],
     );
   }
-}
+} 
