@@ -1,7 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/utils/product.dart';
-import 'package:ecommerce_app/utils/product_card.dart';
+import 'package:ecommerce_app/domain/entites/product.dart';
+import 'package:ecommerce_app/presentation/widgets/product_card.dart';
+import 'package:ecommerce_app/data/repositories/product_repository_impl.dart';
+import 'package:ecommerce_app/domain/usecases/get.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});
@@ -11,9 +13,30 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+  final ProductRepositoryImpl _productRepo = ProductRepositoryImpl();
+  final getAllProducts _getAllProducts = getAllProducts(ProductRepositoryImpl());
+  List<Product> _products = [];
+
+  @override
+  void initState() {
+    super.initState();
+    _loadProducts();
+  }
+
+  Future<void> _loadProducts() async {
+    try {
+      final products = await _getAllProducts();
+      print('Loaded ${products.length} products from repository');
+      setState(() {
+        _products = products;
+      });
+    } catch (e) {
+      print('Error loading products: $e');
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
-    // TODO: implement build
     return Scaffold(
       appBar: AppBar(
         backgroundColor: const Color.fromARGB(255, 235, 234, 226),
@@ -52,9 +75,7 @@ class _HomePageState extends State<HomePage> {
           IconButton(
             icon: Icon(Icons.refresh, color: Colors.black45),
             onPressed: () {
-              setState(() {
-                // This will rebuild the widget and refresh the product list
-              });
+              _loadProducts();
             },
           ),
         ],
@@ -86,7 +107,7 @@ class _HomePageState extends State<HomePage> {
             SizedBox(height: 20),
             // the card of each list
             Expanded(
-              child: Product.products.isEmpty
+              child: _products.isEmpty
                   ? Center(
                       child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
@@ -119,10 +140,19 @@ class _HomePageState extends State<HomePage> {
                       ),
                     )
                   : ListView.builder(
-                      itemCount: Product.products.length,
+                      itemCount: _products.length,
                       itemBuilder: (context, index) => Padding(
                         padding: const EdgeInsets.only(bottom: 16.0),
-                        child: ProductCard(product: Product.products[index]),
+                        child: ProductCard(
+                          product: _products[index],
+                          onProductDeleted: _loadProducts,
+                          onProductUpdated: (updatedProduct) {
+                            // Update the product in the list
+                            setState(() {
+                              _products[index] = updatedProduct;
+                            });
+                          },
+                        ),
                       ),
                       scrollDirection: Axis.vertical,
                       physics: BouncingScrollPhysics(),
@@ -134,12 +164,13 @@ class _HomePageState extends State<HomePage> {
       ),
       floatingActionButton: FloatingActionButton(
         onPressed: () async {
+          print('Floating action button pressed - navigating to add page');
           final result = await Navigator.pushNamed(context, '/add');
+          print('Returned from add page with result: $result');
           // Refresh the page when returning from AddProduct
           if (result != null) {
-            setState(() {
-              // This will rebuild the widget and show the new product
-            });
+            print('Result is not null, reloading products');
+            _loadProducts();
           }
         },
         child: Icon(Icons.add, color: Colors.black45),

@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/utils/product.dart';
+import 'package:ecommerce_app/domain/entites/product.dart';
+import 'package:ecommerce_app/data/repositories/product_repository_impl.dart';
+import 'package:ecommerce_app/domain/usecases/delete.dart';
+import 'package:ecommerce_app/presentation/pages/update_product.dart';
 
 class ProductView extends StatelessWidget {
   final Product product;
+  final VoidCallback? onProductDeleted;
+  final Function(Product)? onProductUpdated;
 
-  ProductView({super.key, required this.product});
+  ProductView({super.key, required this.product, this.onProductDeleted, this.onProductUpdated});
 
   @override
   Widget build(BuildContext context) {
@@ -264,16 +269,19 @@ class ProductView extends StatelessWidget {
                     children: [
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // Update functionality
-                            ScaffoldMessenger.of(context).showSnackBar(
-                              SnackBar(
-                                content: Text(
-                                  'Update functionality coming soon!',
-                                ),
-                                backgroundColor: Colors.blue,
+                            final result = await Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => UpdateProduct(product: product),
                               ),
                             );
+                            
+                            // If product was updated, call the callback
+                            if (result != null && result is Product) {
+                              onProductUpdated?.call(result);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                             backgroundColor: Colors.blue,
@@ -303,7 +311,7 @@ class ProductView extends StatelessWidget {
                       SizedBox(width: 16),
                       Expanded(
                         child: ElevatedButton(
-                          onPressed: () {
+                          onPressed: () async {
                             // Delete functionality
                             showDialog(
                               context: context,
@@ -320,21 +328,34 @@ class ProductView extends StatelessWidget {
                                       child: Text('Cancel'),
                                     ),
                                     TextButton(
-                                      onPressed: () {
-                                        // Remove product from list
-                                        Product.products.remove(product);
-                                        Navigator.of(context).pop();
-                                        Navigator.of(context).pop('deleted');
-                                        ScaffoldMessenger.of(
-                                          context,
-                                        ).showSnackBar(
-                                          SnackBar(
-                                            content: Text(
-                                              'Product deleted successfully!',
+                                      onPressed: () async {
+                                        try {
+                                          // Close the dialog first
+                                          Navigator.of(context).pop();
+                                          
+                                          // Show success message
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text(
+                                                'Product deleted successfully!',
+                                              ),
+                                              backgroundColor: Colors.red,
                                             ),
-                                            backgroundColor: Colors.red,
-                                          ),
-                                        );
+                                          );
+                                          
+                                          // Navigate back and pass the deleted status
+                                          Navigator.of(context).pop('deleted');
+                                          
+                                          // Call the callback if provided
+                                          onProductDeleted?.call();
+                                        } catch (e) {
+                                          ScaffoldMessenger.of(context).showSnackBar(
+                                            SnackBar(
+                                              content: Text('Error deleting product: $e'),
+                                              backgroundColor: Colors.red,
+                                            ),
+                                          );
+                                        }
                                       },
                                       child: Text(
                                         'Delete',

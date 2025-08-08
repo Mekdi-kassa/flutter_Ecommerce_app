@@ -1,8 +1,11 @@
+import 'package:ecommerce_app/domain/repositories/product_repo.dart';
+import 'package:ecommerce_app/domain/usecases/Add.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:ecommerce_app/utils/product.dart';
+import 'package:ecommerce_app/domain/entites/product.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
+import 'package:ecommerce_app/data/repositories/product_repository_impl.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct({super.key});
@@ -13,6 +16,10 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   final _formKey = GlobalKey<FormState>();
+  final ProductRepo _productRepo = ProductRepositoryImpl();
+  final InsertProduct _insertProduct;
+
+  _AddProductState() : _insertProduct = InsertProduct(ProductRepositoryImpl());
 
   TextEditingController _name = TextEditingController();
   TextEditingController _description = TextEditingController();
@@ -67,8 +74,9 @@ class _AddProductState extends State<AddProduct> {
         imageFile: _imageFile,
       );
 
-      // Add to your products list (assuming Product has a static list)
-      Product.products.add(newProduct);
+      // Add to repository using the use case
+      await _insertProduct(newProduct);
+      print('Product added successfully: ${newProduct.name}');
 
       // Show success message
       ScaffoldMessenger.of(context).showSnackBar(
@@ -169,7 +177,9 @@ class _AddProductState extends State<AddProduct> {
                   height: 50,
                   child: TextFormField(
                     controller: _catagory,
-                    validator: (value) => value == null || value.isEmpty ? 'Enter category' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Enter category'
+                        : null,
                     decoration: InputDecoration(
                       labelText: "Category",
                       border: OutlineInputBorder(
@@ -186,7 +196,9 @@ class _AddProductState extends State<AddProduct> {
                   height: 50,
                   child: TextFormField(
                     controller: _description,
-                    validator: (value) => value == null || value.isEmpty ? 'Enter description' : null,
+                    validator: (value) => value == null || value.isEmpty
+                        ? 'Enter description'
+                        : null,
                     decoration: InputDecoration(
                       labelText: "Descriptions",
                       border: OutlineInputBorder(
@@ -203,7 +215,8 @@ class _AddProductState extends State<AddProduct> {
                   width: 300,
                   child: TextFormField(
                     controller: _price,
-                    validator: (value) => value == null || value.isEmpty ? 'Enter price' : null,
+                    validator: (value) =>
+                        value == null || value.isEmpty ? 'Enter price' : null,
                     decoration: InputDecoration(
                       labelText: "Price",
                       border: OutlineInputBorder(
@@ -230,7 +243,9 @@ class _AddProductState extends State<AddProduct> {
                         color: const Color.fromARGB(95, 249, 248, 248),
                       ),
                     ),
-                    style: ElevatedButton.styleFrom(backgroundColor: Colors.blue),
+                    style: ElevatedButton.styleFrom(
+                      backgroundColor: Colors.blue,
+                    ),
                   ),
                 ),
                 const SizedBox(height: 16),

@@ -1,10 +1,14 @@
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/utils/product.dart';
-import 'package:ecommerce_app/pages/view.dart';
+import 'package:ecommerce_app/domain/entites/product.dart';
+import 'package:ecommerce_app/presentation/pages/view.dart';
 
 class ProductCard extends StatelessWidget {
   final Product product;
-  ProductCard({super.key, required this.product});
+  final VoidCallback? onProductDeleted;
+  final Function(Product)? onProductUpdated;
+  
+  ProductCard({super.key, required this.product, this.onProductDeleted, this.onProductUpdated});
+  
   @override
   Widget build(BuildContext context) {
     return Container(
@@ -14,13 +18,22 @@ class ProductCard extends StatelessWidget {
         children: [
           // Image with click navigation
           GestureDetector(
-            onTap: () {
-              Navigator.push(
+            onTap: () async {
+              final result = await Navigator.push(
                 context,
                 MaterialPageRoute(
-                  builder: (context) => ProductView(product: product),
+                  builder: (context) => ProductView(
+                    product: product,
+                    onProductDeleted: onProductDeleted,
+                    onProductUpdated: onProductUpdated,
+                  ),
                 ),
               );
+              
+              // If product was deleted, refresh the parent
+              if (result == 'deleted') {
+                onProductDeleted?.call();
+              }
             },
             child: Container(
               width: 350,
@@ -30,12 +43,30 @@ class ProductCard extends StatelessWidget {
                   topLeft: Radius.circular(10),
                   topRight: Radius.circular(10),
                 ),
-                child: Image.memory(
-                  product.webImage!,
-                  fit: BoxFit.cover,
-                  width: 350,
-                  height: 300,
-                ),
+                child: product.webImage != null
+                    ? Image.memory(
+                        product.webImage!,
+                        fit: BoxFit.cover,
+                        width: 350,
+                        height: 300,
+                      )
+                    : product.imageFile != null
+                        ? Image.file(
+                            product.imageFile!,
+                            fit: BoxFit.cover,
+                            width: 350,
+                            height: 300,
+                          )
+                        : Container(
+                            width: 350,
+                            height: 300,
+                            color: Colors.grey[300],
+                            child: Icon(
+                              Icons.image_not_supported,
+                              size: 50,
+                              color: Colors.grey[600],
+                            ),
+                          ),
               ),
             ),
           ),
