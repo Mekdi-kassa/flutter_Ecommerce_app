@@ -1,9 +1,9 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:ecommerce_app/domain/entites/product.dart';
-import 'package:ecommerce_app/presentation/widgets/product_card.dart';
-import 'package:ecommerce_app/data/repositories/product_repository_impl.dart';
-import 'package:ecommerce_app/domain/usecases/get.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/entites/product.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/presentation/widgets/product_card.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/data/repositories/product_repository_impl.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/usecases/get.dart';
 
 class HomePage extends StatefulWidget {
   HomePage({super.key});

@@ -1,6 +1,6 @@
-import 'package:ecommerce_app/presentation/pages/Add_product.dart';
-import 'package:ecommerce_app/presentation/pages/Home_page.dart';
-import 'package:ecommerce_app/presentation/pages/search.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/presentation/pages/Add_product.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/presentation/pages/Home_page.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/presentation/pages/search.dart';
 import 'package:flutter/material.dart';
 
 void main() {

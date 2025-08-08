@@ -1,11 +1,11 @@
-import 'package:ecommerce_app/domain/repositories/product_repo.dart';
-import 'package:ecommerce_app/domain/usecases/Add.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/repositories/product_repo.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/usecases/Add.dart';
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:ecommerce_app/domain/entites/product.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/entites/product.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
-import 'package:ecommerce_app/data/repositories/product_repository_impl.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/data/repositories/product_repository_impl.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:io';
-import 'package:ecommerce_app/domain/entites/product.dart';
+import 'package:ecommerce_app/feature/flutter_Ecommerce_app/domain/entites/product.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
 
