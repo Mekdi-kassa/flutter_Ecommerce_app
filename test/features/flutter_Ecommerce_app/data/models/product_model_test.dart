@@ -1,5 +1,4 @@
 import 'dart:io';
-import 'dart:math';
 
 import 'package:ecommerce_app/features/flutter_Ecommerce_app/data/models/Product_model.dart';
 import 'package:flutter_test/flutter_test.dart';
@@ -19,7 +18,7 @@ void main() {
       expect(model.description, 'limited edition');
       expect(model.price, 1000);
     });
-    test("tojson rteurn correct map", () {
+    test("tojson return correct map", () {
       final model = ProductModel(
         name: "Dior",
         category: 'Womens High Heel',

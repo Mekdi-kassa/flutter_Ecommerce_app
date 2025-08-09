@@ -1,18 +1,24 @@
+import 'package:ecommerce_app/core/plateform/network_info.dart';
+import 'package:ecommerce_app/features/flutter_Ecommerce_app/data/datasources/prodouct_local_repo.dart';
+import 'package:ecommerce_app/features/flutter_Ecommerce_app/data/datasources/product_remote_data.dart';
 import 'package:ecommerce_app/features/flutter_Ecommerce_app/domain/entites/product.dart';
 import 'package:ecommerce_app/features/flutter_Ecommerce_app/domain/repositories/product_repo.dart';
-import 'package:flutter/material.dart';
+import 'package:flutter/rendering.dart';
+import 'package:flutter/widgets.dart';
 
 class ProductRepositoryImpl implements ProductRepo {
-  static final ProductRepositoryImpl _instance = ProductRepositoryImpl._internal();
   
+  static final ProductRepositoryImpl _instance =
+      ProductRepositoryImpl._internal();
+
   factory ProductRepositoryImpl() {
     return _instance;
   }
-  
+
   ProductRepositoryImpl._internal();
-  
+
   final List<Product> _product = [];
-  
+
   @override
   Future<void> insertproduct(Product product) async {
     _product.add(product);
