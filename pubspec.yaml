@@ -37,6 +37,7 @@ dependencies:
   cupertino_icons: ^1.0.8
   image_picker: ^1.1.2
   mockito: ^5.5.0
+  internet_connection_checker: ^0.0.1+4
 
 dev_dependencies:
   flutter_test:
