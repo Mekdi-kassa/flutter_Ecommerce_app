@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'package:ecommerce_app/utils/product.dart';
 import 'package:file_picker/file_picker.dart';
 import 'dart:typed_data';
+import 'package:ecommerce_app/features/product/domain/entities/product.dart' as clean_product;
+import 'package:ecommerce_app/features/product/data/services/product_service.dart';
 
 class AddProduct extends StatefulWidget {
   AddProduct({super.key});
@@ -14,6 +15,7 @@ class AddProduct extends StatefulWidget {
 
 class _AddProductState extends State<AddProduct> {
   final _formKey = GlobalKey<FormState>();
+  final ProductService _productService = ProductService();
 
   TextEditingController _name = TextEditingController();
   TextEditingController _description = TextEditingController();
@@ -22,7 +24,6 @@ class _AddProductState extends State<AddProduct> {
 
   File? _imageFile;
   Uint8List? _webImage;
-  bool _isLoading = false;
 
   Future<void> _pickImage() async {
     try {
@@ -58,10 +59,8 @@ class _AddProductState extends State<AddProduct> {
       return;
     }
 
-    setState(() => _isLoading = true);
-
     try {
-      // Create the product object
+      // Create the old product object for backward compatibility
       final newProduct = Product(
         name: _name.text.trim(),
         description: _description.text.trim(),
@@ -71,7 +70,19 @@ class _AddProductState extends State<AddProduct> {
         imageFile: _imageFile,
       );
 
-      // Add to your products list (assuming Product has a static list)
+      // Create the clean architecture product entity
+      final cleanProduct = clean_product.Product(
+        id: DateTime.now().millisecondsSinceEpoch.toString(), // Generate unique ID
+        name: _name.text.trim(),
+        description: _description.text.trim(),
+        price: double.parse(_price.text.trim()),
+        imageUrl: '', // Placeholder for now
+      );
+
+      // Add to Clean Architecture repository
+      await _productService.insertProduct(cleanProduct);
+
+      // Also add to old list for backward compatibility
       Product.products.add(newProduct);
 
       // Show success message
@@ -85,10 +96,6 @@ class _AddProductState extends State<AddProduct> {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(content: Text('Error adding product: ${e.toString()}')),
       );
-    } finally {
-      if (mounted) {
-        setState(() => _isLoading = false);
-      }
     }
   }
 
